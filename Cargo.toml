@@ -21,9 +21,10 @@ include = [
 ]
 
 [dependencies]
+anyhow = "1.0.79"
 bpaf = { version = "0.9.8", features = ["autocomplete", "batteries"] }
 directories = "5.0.1"
-flate2 = "1.0.28"
+flate2 = { version = "1.0.28", optional = true }
 hex = "0.4.3"
 home = "0.5.9"
 indexmap = { version = "2.1.0", features = ["serde"] }
@@ -31,40 +32,40 @@ mimalloc = { version = "0.1.39", optional = true }
 minisign-verify = { version = "0.2.1", optional = true }
 native-tls = { version = "0.2.11", optional = true }
 owo-colors = { version = "4.0.0", features = ["supports-colors"], optional = true }
-serde = { version = "1.0.193", features = ["derive"] }
-serde_json = "1.0.108"
+serde = { version = "1.0.195", features = ["derive"] }
+serde_json = "1.0.111"
 sha2 = { version = "0.10.8", optional = true }
 sha3 = { version = "0.10.8", optional = true }
 tar = "0.4.40"
-toml = { version = "0.8.8", default-features = false, features = ["display", "parse"] }
-ureq = { version = "2.9.1", default-features = false, features = ["json", "gzip", "brotli"] }
+toml = { version = "0.8.8", default-features = false, features = ["parse"] } # TODO: Remove display fow now
+ureq = { version = "2.9.1", default-features = false, features = ["gzip", "brotli"] } # TODO: Remove json for now
 
 [features]
-default = ["vendored-openssl", "default-native"]
-default-native = ["native", "default-no-tls"]
+default = ["default-rustls"]
 default-rustls = ["rustls", "default-no-tls"]
-default-no-tls = ["indexes", "security", "color"]
-indexes = ["github-public", "github-private"]
-github-public = []
-github-private = []
-#gitlab-public = [] #TODO: Under dev
-#gitlab-private = [] #TODO: Under dev
-#forgejo-public = [] #TODO: Under dev
-#forgejo-private = [] #TODO: Under dev
-#gitea-public = ["forgejo-public"] #TODO: Under dev
-#gitea-private = ["forgejo-private"] #TODO: Under dev
-#custom-http-public = [] #TODO: Under dev
-#custom-http-private = [] #TODO: Under dev
-security = ["sha2", "sha3", "sig"]
-sha2 = ["dep:sha2"]
-sha3 = ["dep:sha3"]
-sig = ["dep:minisign-verify"]
+default-native = ["native", "default-no-tls"]
+default-no-tls = ["ex-indexes", "sec", "compression", "color"]
+
+# Extend index support
+ex-indexes = ["gh-pri"]
+#gh-pub = [] # TODO: gh-pub feature should always be enabled since it is built on cuhttp.
+gh-pri = []
+
 rustls = ["ureq/tls"]
 rustls-native-certs = ["rustls", "ureq/native-certs"]
 native = ["native-tls", "ureq/native-tls"]
 vendored-openssl = ["native", "native-tls/vendored"]
-mimalloc = ["dep:mimalloc"]
+
+sec = ["minisign", "sha2", "sha3"]
+minisign = ["dep:minisign-verify"]
+sha2 = ["dep:sha2"]
+sha3 = ["dep:sha3"]
+
+compression = ["gzip"]
+gzip = ["dep:flate2"]
+
 color = ["dep:owo-colors", "bpaf/bright-color"]
+mimalloc = ["dep:mimalloc"]
 
 [profile.release]
 opt-level = 3

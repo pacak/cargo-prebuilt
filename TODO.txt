@@ -1,0 +1,42 @@
+Do a full rewrite that changes the features, arguments, and depends heavily on custom
+defined indexes.
+
+Remove toml_edit? Does this really need --set-config? Maybe temp remove for now.
+
+No longer require tls.
+
+// Six character code of the spec to use for --index
+--spec
+  default: gh-pub
+
+// url of root index
+// TODO: Check url for @ symbols and ban them
+--index
+  default: https://github.com/cargo-prebuilt/index
+
+// Public key, can be multiple
+--pub-key (-p)
+
+// auth token
+--auth
+
+// Do not overwrite binary files
+--safe (-s)
+  default: false
+  true/false
+
+// Do not use minisign to verify info.json/hashes.json
+// Only one
+--sig-with
+  default: minisign
+  none
+
+// Accepts multiple -v flags or --verify-with flags
+// Tries sha3_512, sha3_256, sha512, sha256
+--verify-with (-v)
+  default: sha3_512,sha3_256,sha512,sha256
+  none - THIS OVERRIDES EVERYTHING ELSE
+  sha256 - sha2
+  sha512
+  sha3_256 - sha3
+  sha3_512

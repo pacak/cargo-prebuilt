@@ -34,6 +34,7 @@ pub fn installed(id: &str, version: &str, config: &Config) {
     }
 }
 
+// TODO: Need config.out?
 pub fn get_latest(id: &str, version: &str) {
     println!("{{\"crate\":\"{id}\",\"version\":\"{version}\",\"event_version\":\"{EVENT_VERSION}\",\"event\":\"latest_version\",\"data\":\"{version}\"}}");
 }
